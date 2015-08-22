@@ -1,6 +1,7 @@
-var express=require("express");
-var bodyparser=require("body-parser");
-var lb=require("./lb.js");
+var express = require("express");
+var bodyparser = require("body-parser");
+var lb = require("./lb.js");
+var path = require('path');
 
 
 var app=express();
@@ -13,7 +14,7 @@ lb.init(app,"/lb");
 //app.use("/public",express.static("public"));
 
 app.get("/",function(req,res){
-	res.send("Hello World!  This is the homepage!");
+	res.sendFile('index.html', {root: '../frontend'});
 });
 app.use(function(req,res){
 	res.send("404 Not Found. ):");
