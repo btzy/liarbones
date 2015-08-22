@@ -167,6 +167,7 @@ module.exports = (function() {
 
 		});
 		app.post(path + "/send", function(req, res) {
+      console.log('Command received.');
 			switch (req.body.Action) {
 				case "JOIN":
 					if (!req.body.GameRoom || !req.body.PlayerID) return res.send(

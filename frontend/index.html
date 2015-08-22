@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<script type = 'text/javascript'>
+  
+//API Method (SEND)
+//Request:
+//Action:”JOIN”,PlayerID:<string>,GameRoom:<string>
+//Action:”BID”,PlayerID:<string>,GameRoom:<string>,Bid:<integer>
+
+
+//API Method (LISTEN)
+//Request:
+//PlayerID:<string>,GameRoom:<string>,LastIndex:<integer>
+  
+function send (action, room_id, bid) {
+  var action = action;
+  var player_id = document.getElementById('player_id').value;
+  console.log(document.getElementById('player_id'));
+  console.log(player_id);
+  
+  
+  if (action === 'JOIN'){
+    var params = 'Action: "JOIN",PlayerID:' + player_id + ',GameRoom:' + room_id;
+  }
+  else if (action === 'BID') {
+    var params = 'Action: "BID",PlayerID:' + player_id + ',GameRoom:' + room_id + 'Bid:' + bid;
+  }
+  else { console.log('Unrecognised action'); }
+  
+  var req = new XMLHttpRequest();
+  req.open ('POST', '/send', true);
+  req.send(params);
+  console.log(params);
+}
+
+</script>
+
+<label for = 'player_id'>Enter your player ID</label>
+<input type = 'text' id = 'player_id'>
+
+<label>Join Room 1</label>
+<button onclick = 'send("JOIN", 1)'>Join Room 1</button>
+
+<label>Join Room 2</label>
+<button onclick = 'send("JOIN", 2)'>Join Room 2</button>
