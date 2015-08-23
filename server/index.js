@@ -12,7 +12,7 @@ app.use(bodyparser.urlencoded({extended:true}));
 app.use(bodyparser.json());
 
 lb.init(app,"/lb");
-textclient(app,"/textclient");
+textclient(app,"/textclient",express);
 
 //app.use("/public",express.static("public"));
 
