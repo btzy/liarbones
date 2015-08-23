@@ -2,6 +2,7 @@ var express = require("express");
 var bodyparser = require("body-parser");
 var lb = require("./lb.js");
 var path = require('path');
+var textclient=require("./textclient.js");
 
 
 
@@ -11,6 +12,7 @@ app.use(bodyparser.urlencoded({extended:true}));
 app.use(bodyparser.json());
 
 lb.init(app,"/lb");
+textclient(app,"/textclient",express);
 
 //app.use("/public",express.static("public"));
 
