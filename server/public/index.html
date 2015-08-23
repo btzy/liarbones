@@ -2,13 +2,28 @@
 <script src = '/public/jquery-2.1.4.min.js'></script>
 <script src = '/public/frontend.js'></script>
 
+<h1>Liarbones!</h1>
+
+<h1>Info Board</h1>
+<ul id = 'info_board'>
+  <li id = 'my_id'>My ID: </li>
+  <li id = 'game_room'>Game Room: </li>
+  <li id = 'game_phase'>Game Phase: </li>
+  <li id = 'my_coins'>My Coins</li>
+  <li id = 'opp_coins'>Opp's Coins: </li>
+  <li id = 'my_health'>My Health: </li>
+  <li id = 'opp_health'>Opponent's Health: </li>
+  <li id = 'my_die'>My Die: </li>
+  <li id = 'opp_die'>Opponent's Die: </li>
+</ul>
+
 <label for = 'player_id'>Enter your player ID</label>
 <input type = 'text' id = 'player_id'>
-
+<br>
 <label>Join Room 1</label>
 <button onclick = 'send_request("JOIN", 1)'>Join Room 1</button>
-
+<br>
 <label>Join Room 2</label>
 <button onclick = 'send_request("JOIN", 2)'>Join Room 2</button>
-
-<button onclick  = 'listen_request (1, 0)'>Make a listen request</button>
+<br>
+<button onclick  = 'listen_request (1)'>Make a listen request</button>
