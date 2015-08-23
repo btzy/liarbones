@@ -52,7 +52,7 @@ $(document).ready(function(){
         _listen_index=0;
         _listen_start=true;
         var _listen=function(){
-            $.post("http://"+window.location.host+"/lb/listen",{PlayerID:playerid,GameRoom:gameroom,LastIndex:index},function(data){
+            $.post(window.location.protocol+"//"+window.location.host+"/lb/listen",{PlayerID:playerid,GameRoom:gameroom,LastIndex:index},function(data){
                 _listen_data.push.apply(_listen_data,data); // concats array
                 index=_listen_data.length;
                 if(_listen_start){
@@ -94,7 +94,7 @@ $(document).ready(function(){
                         data=parseInt(data,10);
                         if(data>=0&&data<=message.MyCoins){
                             output("You bidded "+data+" coins.");
-                            $.post("http://"+window.location.host+"/lb/send",{Action:"BID",PlayerID:playerid,GameRoom:gameroom,Bid:data},function(data){
+                            $.post(window.location.protocol+"//"+window.location.host+"/lb/send",{Action:"BID",PlayerID:playerid,GameRoom:gameroom,Bid:data},function(data){
                                 if(data==="Command OK."){
                                     output("Awaiting opponent...");
                                     listen(function(message){
@@ -137,7 +137,7 @@ $(document).ready(function(){
         });
     }
     var start_game=function(playerid,gameroom){
-        $.post("http://"+window.location.host+"/lb/send",{Action:"JOIN",PlayerID:playerid,GameRoom:gameroom},function(data){
+        $.post(window.location.protocol+"//"+window.location.host+"/lb/send",{Action:"JOIN",PlayerID:playerid,GameRoom:gameroom},function(data){
             if(data==="Command OK."){
                 output("Joined game at room \""+gameroom+"\".");
                 output("Awaiting opponent...");
