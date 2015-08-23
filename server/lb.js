@@ -140,6 +140,7 @@ module.exports = (function() {
 	var try_start_game = function(gameroom) {
 		if (games.hasOwnProperty(gameroom) && Object.keys(games[gameroom].players)
 			.length >= 2 && games[gameroom].roundnumber === 0) {
+      //console.log('starting game');
 			start_game(gameroom);
 		}
 	};
@@ -167,7 +168,7 @@ module.exports = (function() {
 
 		});
 		app.post(path + "/send", function(req, res) {
-      console.log('Command received.' + req.body + req);
+      //console.log('Command received.' + req.body + req);
 			switch (req.body.Action) {
 				case "JOIN":
 					if (!req.body.GameRoom || !req.body.PlayerID) {
@@ -180,7 +181,7 @@ module.exports = (function() {
 						roundnumber: 0,
 						roundstate: 0
 					};
-          console.log('testing');
+          //console.log('testing');
 					if (!games[req.body.GameRoom].players.hasOwnProperty(req.body.PlayerID) &&
 						games[req.body.GameRoom].roundnumber === 0) {
 						games[req.body.GameRoom].players[req.body.PlayerID] = {
@@ -191,7 +192,7 @@ module.exports = (function() {
 							dice: -1,
 							listenqueue: []
 						};
-            console.log('trying to start game...');
+            //console.log('trying to start game...');
 						try_start_game(req.body.GameRoom);
 					}
 					break;
