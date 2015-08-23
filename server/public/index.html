@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<script src = '/public/jquery-2.1.4.min.js'></script>
+<script src = '/public/frontend.js'></script>
+
+<label for = 'player_id'>Enter your player ID</label>
+<input type = 'text' id = 'player_id'>
+
+<label>Join Room 1</label>
+<button onclick = 'send_request("JOIN", 1)'>Join Room 1</button>
+
+<label>Join Room 2</label>
+<button onclick = 'send_request("JOIN", 2)'>Join Room 2</button>
+
+<button onclick  = 'listen_request (1, 0)'>Make a listen request</button>
