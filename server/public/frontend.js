@@ -21,35 +21,72 @@ function send_request (action, room_id, bid) { //bid is an optional parameter
   //console.log(document.getElementById('player_id'));
   console.log('player ID'+ player_id);
   console.log(action);
-
-  $.ajax(
-  { url: '/lb/send', 
-    method: "POST", 
-    data: {
-      Action:action,
-      PlayerID:player_id, 
-      GameRoom:room_id
-    },
-    dataType:"json",                      
-    success:function(data){console.log('response received');}
-  });
+  
+  if (action === "JOIN") {
+    $.ajax(
+    { url: '/lb/send', 
+      method: "POST", 
+      data: {
+        Action:action,
+        PlayerID:player_id, 
+        GameRoom:room_id
+      },
+      dataType:"json",                      
+      success:function(data){console.log('response received');}
+    });
+  }
+  else if (action === "BID") {
+    $.ajax(
+    { url: '/lb/send', 
+      method: "POST", 
+      data: {
+        Action:action,
+        PlayerID:player_id, 
+        GameRoom:room_id,
+        Bid:bid
+      },
+      dataType:"json",                      
+      success:function(data){console.log('response received');}
+    });
+  }
+  else console.log("error");
 }
   
 function listen_request (room_id, last_index) {
   var player_id = document.getElementById('player_id').value;
-  console.log(player_id);
+  //API Method (LISTEN)
+  //Request:
+  //PlayerID:<string>,GameRoom:<string>,LastIndex:<integer>
   
-  var params = 'PlayerID=' + player_id + '&GameRoom=' + room_id + '&LastIndex=' + last_index;
+  $.ajax(
+    { url: '/lb/send', 
+      method: "POST", 
+      data: {
+        PlayerID:player_id, 
+        GameRoom:room_id,
+      },
+      dataType:"json",                      
+      success: function(data) {
+        var response = JSON.parse(data);
+        console.log('success');
+        console.log(response);
+      }
+    }
+  );
+}
+
   
-  var req = new XMLHttpRequest();
-  req.open ('POST', '/lb/listen', true);
-  req.send (params);
+  
+  //var params = 'PlayerID=' + player_id + '&GameRoom=' + room_id + '&LastIndex=' + last_index;
+  
+  //var req = new XMLHttpRequest();
+  //req.open ('POST', '/lb/listen', true);
+  //req.send (params);
   
   //Create a new response_listener to listen for the request
-  var listener = new response_listener(req);
-}
+  //var listener = new response_listener(req);
   
-function response_listener (req) {
+/*function response_listener (req) {
   //Use the previous XMLHttpRequest in the outer scope
   req.onreadystatechange = function () {
     if (req.readyState == 4 && req.status == 200) {
@@ -64,5 +101,5 @@ function response_listener (req) {
 function handle_response (response) {
   var response = JSON.parse(response);
   //if response.Action.
-}
+}*/
 
