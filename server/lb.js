@@ -167,16 +167,20 @@ module.exports = (function() {
 
 		});
 		app.post(path + "/send", function(req, res) {
-      console.log('Command received.');
+      console.log('Command received.' + req.body + req);
 			switch (req.body.Action) {
 				case "JOIN":
-					if (!req.body.GameRoom || !req.body.PlayerID) return res.send(
-						"Missing POST data.");
+					if (!req.body.GameRoom || !req.body.PlayerID) {
+            console.log("Missing POST data.");
+            return res.send("Missing POST data.");
+          }
+            
 					if (!games.hasOwnProperty(req.body.GameRoom)) games[req.body.GameRoom] = {
 						players: {},
 						roundnumber: 0,
 						roundstate: 0
 					};
+          console.log('testing');
 					if (!games[req.body.GameRoom].players.hasOwnProperty(req.body.PlayerID) &&
 						games[req.body.GameRoom].roundnumber === 0) {
 						games[req.body.GameRoom].players[req.body.PlayerID] = {
@@ -187,6 +191,7 @@ module.exports = (function() {
 							dice: -1,
 							listenqueue: []
 						};
+            console.log('trying to start game...');
 						try_start_game(req.body.GameRoom);
 					}
 					break;
