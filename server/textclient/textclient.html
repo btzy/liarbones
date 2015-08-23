@@ -1,14 +1,31 @@
 <!DOCTYPE html>
-<script src = '/public/jquery-2.1.4.min.js'></script>
-<script src = '/public/frontend.js'></script>
-
-<label for = 'player_id'>Enter your player ID</label>
-<input type = 'text' id = 'player_id'>
-
-<label>Join Room 1</label>
-<button onclick = 'send_request("JOIN", 1)'>Join Room 1</button>
-
-<label>Join Room 2</label>
-<button onclick = 'send_request("JOIN", 2)'>Join Room 2</button>
-
-<button onclick  = 'listen_request (1, 0)'>Make a listen request</button>
+<html>
+    <head>
+        <script src="jquery-2.1.4.min.js"></script>
+        <script src="textclient.js"></script>
+        <title>Liarbones Text Client</title>
+        <style>
+            #displaybox{
+                height:100%;
+                padding-bottom:50px;
+                box-sizing:border-box;
+                font-family:"Lucida Console", Monaco, monospace;
+                border:1px solid grey;
+                overflow:scroll;
+            }
+            #inputbox{
+                width:100%;
+                position:absolute;
+                bottom:0;
+                left:0;
+                border:1px solid grey;
+            }
+        </style>
+    </head>
+    <body>
+        <div style="position:absolute;top:0;bottom:0;left:0;right:0;">
+            <div id="displaybox"></div>
+            <input id="inputbox" type="text" placeholder="Type here" style="width:100%;position:absolute;bottom:0;left:0;">
+        </div>
+    </body>
+</html>
