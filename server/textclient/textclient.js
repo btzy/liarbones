@@ -39,8 +39,9 @@ $(document).ready(function(){
     var _listen_start=false;
     var _despatch_callback=function(){
         if(_listen_index<_listen_callbacks.length&&_listen_index<_listen_data.length){
-            _listen_callbacks[_listen_index](_listen_data[_listen_index]);
+            var _li=_listen_index;
             ++_listen_index;
+            _listen_callbacks[_li](_listen_data[_li]);
             _despatch_callback();
         }
     }
@@ -51,7 +52,7 @@ $(document).ready(function(){
         _listen_index=0;
         _listen_start=true;
         var _listen=function(){
-            $.post(window.location.host+"/lb/listen",{PlayerID:playerid,GameRoom:gameroom,LastIndex:index},function(data){
+            $.post("http://"+window.location.host+"/lb/listen",{PlayerID:playerid,GameRoom:gameroom,LastIndex:index},function(data){
                 _listen_data.push.apply(_listen_data,data); // concats array
                 index=_listen_data.length;
                 if(_listen_start){
@@ -71,7 +72,7 @@ $(document).ready(function(){
     }
     var end_game=function(playerid,message){
         output("Game ended. "+(message.Win)?"Congratulations, you have won!":"You have lost.");
-        output("Your Coins: "+message.MyCoins+" Opponent Coins: "+message.OpponentCoins+" Your Health: "+message.MyHealth+" Opponent Health: "+message.OpponentHealth);
+        output("Your Coins: "+message.MyCoins+". Opponent Coins: "+message.OpponentCoins+". Your Health: "+message.MyHealth+". Opponent Health: "+message.OpponentHealth+".");
         output("Press \"Enter\" to continue...");
         enable(function(data){
             disable();
@@ -85,7 +86,7 @@ $(document).ready(function(){
             }
             if(message.Action=="ROLLDICE"){
                 output("=== Round #"+message.RoundNumber+" ===");
-                output("Your Dice: "+message.MyDice+". Opponent Dice: "+message.OpponentDice+" Your Coins: "+message.MyCoins+" Opponent Coins: "+message.OpponentCoins+" Your Health: "+message.MyHealth+" Opponent Health: "+message.OpponentHealth);
+                output("Your Dice: "+message.MyDice+". Opponent Dice: "+message.OpponentDice+". Your Coins: "+message.MyCoins+". Opponent Coins: "+message.OpponentCoins+". Your Health: "+message.MyHealth+". Opponent Health: "+message.OpponentHealth+".");
                 output("Please enter your bid:");
                 enable(function(data){
                     if(parseInt(data,10).toString()==data){
@@ -93,7 +94,7 @@ $(document).ready(function(){
                         data=parseInt(data,10);
                         if(data>=0&&data<=message.MyCoins){
                             output("You bidded "+data+" coins.");
-                            $.post(window.location.host+"/lb/send",{Action:"BID",PlayerID:playerid,GameRoom:gameroom,Bid:data},function(data){
+                            $.post("http://"+window.location.host+"/lb/send",{Action:"BID",PlayerID:playerid,GameRoom:gameroom,Bid:data},function(data){
                                 if(data==="Command OK."){
                                     output("Awaiting opponent...");
                                     listen(function(message){
@@ -136,11 +137,11 @@ $(document).ready(function(){
         });
     }
     var start_game=function(playerid,gameroom){
-        $.post(window.location.host+"/lb/send",{Action:"JOIN",PlayerID:playerid,GameRoom:gameroom},function(data){
+        $.post("http://"+window.location.host+"/lb/send",{Action:"JOIN",PlayerID:playerid,GameRoom:gameroom},function(data){
             if(data==="Command OK."){
                 output("Joined game at room \""+gameroom+"\".");
                 output("Awaiting opponent...");
-                start_listener();
+                start_listener(playerid,gameroom);
                 listen(function(message){
                     if(message.Action=="START"){
                         output("Game started.");
@@ -168,6 +169,7 @@ $(document).ready(function(){
                 start_game(playerid,data);
             }
         },function(){
+            disable();
             localStorage.removeItem("PlayerID");
             output("Successfully logged out.");
             prompt_welcome();
