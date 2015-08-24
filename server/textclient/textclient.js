@@ -8,8 +8,9 @@ $(document).ready(function(){
             }
         }
         else if(e.which===8){
-            if(_enable_backhandler){
+            if(_enable_backhandler&&$("#inputbox").val()===""){
                 _enable_backhandler();
+                e.preventDefault();
             }
         }
     });
@@ -26,11 +27,9 @@ $(document).ready(function(){
     var enable=function(handler,backhandler){
         $("#inputbox").prop("disabled",false);
         $("#inputbox").val("");
+        $("#inputbox").focus();
         _enable_handler=handler;
         if(backhandler)_enable_backhandler=backhandler;
-    }
-    for(var i=0;i<100;++i){
-        output("");
     }
     $("#inputbox").focus();
     var _listen_data=[];
@@ -71,7 +70,7 @@ $(document).ready(function(){
         _despatch_callback();
     }
     var end_game=function(playerid,message){
-        output("Game ended. "+(message.Win)?"Congratulations, you have won!":"You have lost.");
+        output("Game ended. "+((message.Win)?"Congratulations, you have won!":"You have lost."));
         output("Your Coins: "+message.MyCoins+". Opponent Coins: "+message.OpponentCoins+". Your Health: "+message.MyHealth+". Opponent Health: "+message.OpponentHealth+".");
         output("Press \"Enter\" to continue...");
         enable(function(data){
