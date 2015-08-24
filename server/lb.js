@@ -1,6 +1,6 @@
 module.exports = (function() {
 	var games = {};
-	// games[gameroom]={players[playerid]:{listenqueue:[<json>],res:<object>,last<integer>,coins,health,bid,dice},roundnumber,roundstate}
+	// games[gameroom]={players[playerid]:{listenqueue:[<json>],res:<object>,last<integer>,coins,health,bid,dice:[]},roundnumber,roundstate}
 	// roundstate=0(not started),1(awaiting bids),2(clashed),9:(ended)
 	var get_opponent = function(gameroom, playerid) {
 		for (var opponentid in games[gameroom].players) {
@@ -41,27 +41,27 @@ module.exports = (function() {
 		p1.coins -= p1.bid;
 		p2.coins -= p2.bid;
 		if (p1.bid > p2.bid) {
-			p2.health -= p1.dice;
+			p2.health -= p1.dice[p1.dice.length-1];
 		}
 		else if (p2.bid > p1.bid) {
-			p1.health -= p2.dice;
+			p1.health -= p2.dice[p2.dice.length-1];
 		}
 		else {
-			p1.health -= p2.dice;
-			p2.health -= p1.dice;
+			p1.health -= p2.dice[p2.dice.length-1];
+			p2.health -= p1.dice[p1.dice.length-1];
 		}
 		var playerdata = get_player_data(p1, p2);
 		playerdata.MyBid = p1.bid;
 		playerdata.OpponentBid = p2.bid;
-		playerdata.MyDice = p1.dice;
-		playerdata.OpponentDice = p2.dice;
+		playerdata.MyDice = p1.dice[p1.dice.length-1];
+		playerdata.OpponentDice = p2.dice[p2.dice.length-1];
 		playerdata.Action = "CLASH";
 		add_to_queue(p1, playerdata);
 		playerdata = get_player_data(p2, p1);
 		playerdata.MyBid = p2.bid;
 		playerdata.OpponentBid = p1.bid;
-		playerdata.MyDice = p2.dice;
-		playerdata.OpponentDice = p1.dice;
+		playerdata.MyDice = p2.dice[p2.dice.length-1];
+		playerdata.OpponentDice = p1.dice[p1.dice.length-1];
 		playerdata.Action = "CLASH";
 		add_to_queue(p2, playerdata);
 		p1.bid = p2.bid = -1;
@@ -106,19 +106,24 @@ module.exports = (function() {
 	var run_generate_dice = function(gameroom) {
 		for (var playerid in games[gameroom].players) {
 			if (games[gameroom].players.hasOwnProperty(playerid)) {
-				games[gameroom].players[playerid].dice = parseInt(Math.random() * 6, 10) +
-					1;
+				if(games[gameroom].players[playerid].dice.length<2){
+                    games[gameroom].players[playerid].dice.push(parseInt(Math.random() * 6,10) +1);
+                }
+                else{
+                    var opponent = get_opponent(gameroom, playerid);
+                    games[gameroom].players[playerid].dice.push(opponent.dice[3-games[gameroom].players[playerid].dice.length]);
+                }
 			}
 		}
 		games[gameroom].roundstate = 1;
 		for (var playerid in games[gameroom].players) {
 			if (games[gameroom].players.hasOwnProperty(playerid)) {
 				var player = games[gameroom].players[playerid];
-				var opponent = get_opponent(gameroom, playerid)
+				var opponent = get_opponent(gameroom, playerid);
 				var playerdata = get_player_data(player, opponent);
 				playerdata.RoundNumber = games[gameroom].roundnumber;
-				playerdata.MyDice = player.dice;
-				playerdata.OpponentDice = opponent.dice;
+				playerdata.MyDice = player.dice[player.dice.length-1];
+				playerdata.OpponentDice = opponent.dice[opponent.dice.length-1];
 				playerdata.Action = "ROLLDICE";
 				add_to_queue(player, playerdata);
 			}
@@ -189,7 +194,7 @@ module.exports = (function() {
 							coins: 20,
 							health: 10,
 							bid: -1,
-							dice: -1,
+							dice: [],
 							listenqueue: []
 						};
             //console.log('trying to start game...');
