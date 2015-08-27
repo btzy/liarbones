@@ -58,7 +58,9 @@ $(document).ready(function(){
                     _despatch_callback();
                     _listen();
                 }
-            },"json");
+            },"json").fail(function(){
+                _listen();
+            });
         }
         _listen();
     };
@@ -81,6 +83,7 @@ $(document).ready(function(){
     var play_game_turn=function(playerid,gameroom){
         listen(function(message){
             if(message.Action=="END"){
+                stop_listener();
                 return end_game(playerid,message);
             }
             if(message.Action=="ROLLDICE"){

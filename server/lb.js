@@ -82,6 +82,9 @@ module.exports = (function() {
 			p1.coins);
 		playerdata.Action = "END";
 		add_to_queue(p2, playerdata);
+        setTimeout(function(){
+            delete games[gameroom];
+        },60000);
 	}
 	var try_clash = function(gameroom) {
 		for (var playerid in games[gameroom].players) {
@@ -173,7 +176,6 @@ module.exports = (function() {
 
 		});
 		app.post(path + "/send", function(req, res) {
-      //console.log('Command received.' + req.body + req);
 			switch (req.body.Action) {
 				case "JOIN":
 					if (!req.body.GameRoom || !req.body.PlayerID) {
@@ -186,7 +188,6 @@ module.exports = (function() {
 						roundnumber: 0,
 						roundstate: 0
 					};
-          //console.log('testing');
 					if (!games[req.body.GameRoom].players.hasOwnProperty(req.body.PlayerID) &&
 						games[req.body.GameRoom].roundnumber === 0) {
 						games[req.body.GameRoom].players[req.body.PlayerID] = {
@@ -197,7 +198,6 @@ module.exports = (function() {
 							dice: [],
 							listenqueue: []
 						};
-            //console.log('trying to start game...');
 						try_start_game(req.body.GameRoom);
 					}
 					break;
