@@ -164,6 +164,7 @@ $(document).ready(function(){
         },"text");
     }
     var prompt_game_room=function(playerid){
+        output("");
         output("Please enter game room: [ press backspace to log out ]");
         enable(function(data){
             if(data){
@@ -193,6 +194,8 @@ $(document).ready(function(){
             prompt_game_room(localStorage.getItem("PlayerID"));
         }
     }
-    output("===== Liarbones Text Client =====");
+    output("<span style='color:teal;font-weight:bold'>===== Liarbones Text Client =====</span>");
+    output("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style='color:darkgray'>by</span> <span style='color:blue;font-weight:bold'>btzy</span>");
+    output("");
     prompt_welcome();
 });
