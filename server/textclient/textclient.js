@@ -92,13 +92,13 @@ $(document).ready(function(){
                         disable();
                         data=parseInt(data,10);
                         if(data>=0&&data<=message.MyCoins){
-                            output("You bidded "+data+" coins.");
+                            output("You bid "+data+" coins.");
                             $.post(window.location.protocol+"//"+window.location.host+"/lb/send",{Action:"BID",PlayerID:playerid,GameRoom:gameroom,Bid:data},function(data){
                                 if(data==="Command OK."){
                                     output("Awaiting opponent...");
                                     listen(function(message){
                                         if(message.Action=="CLASH"){
-                                            output("Opponent bidded "+message.OpponentBid+" coins.");
+                                            output("Opponent bid "+message.OpponentBid+" coins.");
                                             if(message.MyBid>message.OpponentBid){
                                                 output("You win this round :)");
                                             }
